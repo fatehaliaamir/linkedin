@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "root",
+    "password": "Haider@123",
+    "database": "Linkedin_Fateh",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}
