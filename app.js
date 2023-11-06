@@ -6,24 +6,29 @@ const bodyParser = require('body-parser');
 
 //local requirements
 const errorController = require('./controllers/error');
-const sequelize = require('./util/database');
-
-
-
+const sequelize = require('./utils/database');
 
 //----------
 
 const app = express();
 
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+
+// Define a route to render the EJS template
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
 //Routes
 //------------
-//const adminRoutes = require('./routes/admin');
-//const shopRoutes = require('./routes/shop');
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
 
 //Using Routes
 //------------
-// app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use(userRoutes);
+app.use(postRoutes);
 
 app.use(errorController.get404);
 
@@ -39,5 +44,11 @@ app.use(errorController.get404);
 // User.hasMany(Order);
 // Order.belongsToMany(Product, { through: OrderItem });
 
+const port = 3000;
 
+app.use(bodyParser.json());
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
