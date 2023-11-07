@@ -12,11 +12,11 @@ router.get('/login', userController.loginUser);
 //sign up - user crud
 router.get('/users', userController.getUser);
 
-router.get('/users/sign-up', userController.getAddUser);
+router.get('/users/:userId', userController.getOneUser)
 
 router.post('/users/sign-up', userController.postAddUser);
 
 router.post('/users/delete-user', userController.postDeleteUser);
 
 module.exports = router;
-
+ 

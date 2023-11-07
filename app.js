@@ -25,6 +25,10 @@ app.get('/', (req, res) => {
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+
 //Using Routes
 //------------
 app.use(userRoutes);
