@@ -1,33 +1,29 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, NOW } = require('sequelize');
 const User = require('../models/user');
 
 exports.loginUser = async (req, res) => {
-  res.send('Login page');
-  const username = req.body;
-  const password = req.body;
-
-  //username = "John";
-  //password = "1234";
-
-  //res.send(username, password)
-
-  try {
-    const user = await User.findOne({ where: { username } });
-
-    if (!user) {    
-      return res.status(401).json({ error: 'User not found' });
+    const username = req.body.username; // Access the username from the request body
+    const password = req.body.password; // Access the password from the request body
+  
+    try {
+      const user = await User.findOne({ where: { username } });
+  
+      if (!user) {
+        return res.status(401).json({ error: 'User not found' });
+      }
+  
+      if (user.password !== password) {
+        return res.status(401).json({ error: 'Invalid password' });
+      }
+  
+      // If username and password are correct, send a success response
+      res.send('Login successful');
+    } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).json({ error: 'An error occurred during login' });
     }
-
-    if (user.password !== password) {
-      return res.status(401).json({ error: 'Invalid password' });
-    }
-
-    res.send('Login successful');
-  } catch (error) {
-    console.error('Error during login:', error);
-    res.status(500).json({ error: 'An error occurred during login' });
-  }
-};
+  };
+  
 
 exports.getUser = async (req, res) => {
   try {
@@ -59,9 +55,12 @@ exports.getOneUser = async (req, res) => {
 };
 
 exports.postAddUser = async (req, res) => {
-  const username = req.body;
-  const email = req.body;
-  const password = req.body;
+  const username = req.body.username;
+  const email = req.body.email;
+  const password = req.body.password;
+  const updatedAt = NOW();
+
+    console.log(username, email, password);
 
   try {
     const newUser = await User.create({
