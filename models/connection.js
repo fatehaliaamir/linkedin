@@ -1,25 +1,31 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class connection extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
+const Sequelize = require('sequelize');
+
+const sequelize = require('../utils/database');
+
+const Conn = sequelize.define('connections', {
+  conn_id: {                //id of this connection
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    allowNull: false,
+    primaryKey: true
+  },
+  user_id: {                //the person sending the request
+      type: Sequelize.INTEGER,
+      allowNull: false,
+  },
+  conn_user_id: {           //the person we're connecting to
+      type: Sequelize.INTEGER,
+      allowNull: false,
+  },
+  status: Sequelize.STRING,  //connected or pending
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE
+  },
+  updatedAt: {
+    allowNull: false,
+    type: Sequelize.DATE
   }
-  connection.init({
-    conn_user_id: DataTypes.STRING,
-    user_id: DataTypes.STRING,
-    status: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'connection',
-  });
-  return connection;
-};
+});
+
+module.exports = Conn;

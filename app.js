@@ -6,26 +6,42 @@ const bodyParser = require('body-parser');
 
 //local requirements
 const errorController = require('./controllers/error');
-const sequelize = require('./util/database');
-
-
-
+const sequelize = require('./utils/database');
 
 //----------
 
 const app = express();
 
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
+
+// Define a route to render the EJS template
+app.get('/', (req, res) => {
+    res.render('index');
+});
+
 //Routes
 //------------
-//const adminRoutes = require('./routes/admin');
-//const shopRoutes = require('./routes/shop');
+const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+const reacRoutes = require('./routes/reaction')
+const connRoutes = require('./routes/connection')
+const commRoutes = require('./routes/comment')
+
+app.use(express.json()); // Use this middleware for JSON data
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 //Using Routes
 //------------
-// app.use('/admin', adminRoutes);
-// app.use(shopRoutes);
+app.use(userRoutes);
+app.use(postRoutes);
+app.use(reacRoutes);
+app.use(connRoutes);
+app.use(commRoutes);
 
-app.use(errorController.get404);
+//app.use(errorController.get404);
 
 //Associations
 //------------
@@ -39,5 +55,11 @@ app.use(errorController.get404);
 // User.hasMany(Order);
 // Order.belongsToMany(Product, { through: OrderItem });
 
+const port = 3000;
 
+app.use(bodyParser.json());
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
