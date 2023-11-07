@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const { post } = require('../routes/user');
 
 exports.getPosts = async (req, res) => {
   try {
@@ -11,13 +12,13 @@ exports.getPosts = async (req, res) => {
 };
 
 exports.postAddPost = async (req, res) => {
-  const { title, content, userId } = req.body;
+  const content = req.body.content;
+  const user_id = req.body.user_id;
 
   try {
     const newPost = await Post.create({
-      title,
-      content,
-      userId,
+        user_id,
+        content
     });
 
     res.send('Post successfully added');
@@ -26,6 +27,26 @@ exports.postAddPost = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while adding the post.' });
   }
 };
+
+exports.getOnePost = async (req, res) => {
+    const postId = req.params.postId; // Access the postId from the URL parameters
+  
+    try {
+      // Use Sequelize to find the post by its ID
+      const post = await Post.findByPk(postId);
+  
+      if (!post) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      // If the post is found, send it as a JSON response
+      res.json(post);
+    } catch (error) {
+      console.error('Error fetching post:', error);
+      res.status(500).json({ error: 'An error occurred while fetching the post.' });
+    }
+  };
+  
 
 exports.postEditPost = async (req, res) => {
   const postId = req.params.postId;
@@ -50,7 +71,25 @@ exports.postEditPost = async (req, res) => {
   }
 };
 
-exports.postDeletePost = (req, res) => {
-  const postId = req.body.postId;
-  res.send(`Post with ID ${postId} deleted`);
-};
+exports.postDeletePost = async (req, res) => {
+    const post_id = req.body.post_id; // Assuming you send the post ID in the request body
+  
+    console.log(post_id);
+
+    try {
+      // Use Sequelize to delete the post from the 'Post' model
+      const deletedPost = await Post.destroy({
+        where: { post_id: post_id },
+      });
+  
+      if (deletedPost) {
+        res.send(`Post with ID ${post_id} deleted`);
+      } else {
+        res.status(404).json({ error: 'Post not found' });
+      }
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      res.status(500).json({ error: 'An error occurred while deleting the post.' });
+    }
+  };
+  
