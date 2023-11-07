@@ -3,7 +3,8 @@ const User = require('../models/user');
 
 exports.loginUser = async (req, res) => {
   res.send('Login page');
-  const { username, password } = req.body;
+  const username = req.body;
+  const password = req.body;
 
   //username = "John";
   //password = "1234";
@@ -58,13 +59,15 @@ exports.getOneUser = async (req, res) => {
 };
 
 exports.postAddUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const username = req.body;
+  const email = req.body;
+  const password = req.body;
 
   try {
     const newUser = await User.create({
       username,
       email,
-      password,
+      password
     });
 
     res.send('User successfully added');
