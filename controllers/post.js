@@ -1,5 +1,4 @@
 const Post = require('../models/post');
-const { post } = require('../routes/user');
 
 exports.getPosts = async (req, res) => {
   try {

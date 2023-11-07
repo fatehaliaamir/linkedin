@@ -7,7 +7,7 @@ const connController = require('../controllers/connection');
 const router = express.Router();
 
 //connections crud
-router.get('/users/conn', connController.getConn);
+router.get('/conn', connController.getConn);
 
 router.get('/users/conn/add-conn', connController.getAddConn);
 

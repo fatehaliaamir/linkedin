@@ -7,12 +7,10 @@ const reactionController = require('../controllers/reaction');
 const router = express.Router();
 
 //reaction crud
-router.get('/posts/reactions', reactionController.getReactions);
+router.get('/reactions', reactionController.getReactions);
 
-router.get('/posts/reactions/add-reaction', reactionController.getAddReaction);
+router.post('/reactions/add-reaction', reactionController.postAddReaction);
 
-router.post('/posts/reactions/add-reaction', reactionController.postAddReaction);
-
-router.post('/posts/reactions/delete-reaction', reactionController.postDeleteReaction);
+router.post('/reactions/delete-reaction', reactionController.postDeleteReaction);
 
 module.exports = router;

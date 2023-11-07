@@ -1,11 +1,17 @@
-const Conn = require('../models/connection');
+const Connection = require('../models/connection');
 
-// Placeholder callback function for retrieving connections
-exports.getConn = (req, res) => {
-    // Your logic to fetch and list connections (e.g., from a database)
-    const connections = ['Connection 1', 'Connection 2', 'Connection 3']; // Replace with actual connection data
+exports.getConn = async (req, res) => {
+  try {
+    // Use Sequelize to fetch all connections from the 'Connection' model
+    const connections = await Connection.findAll();
+
     res.json(connections);
-  };
+  } catch (error) {
+    console.error('Error fetching connections:', error);
+    res.status(500).json({ error: 'An error occurred while fetching connections.' });
+  }
+};
+
 
   // Placeholder callback function for displaying the connection form
 exports.getAddConn = (req, res) => {

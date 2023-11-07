@@ -24,6 +24,9 @@ app.get('/', (req, res) => {
 //------------
 const userRoutes = require('./routes/user');
 const postRoutes = require('./routes/post');
+const reacRoutes = require('./routes/reaction')
+const connRoutes = require('./routes/connection')
+const commRoutes = require('./routes/comment')
 
 app.use(express.json()); // Use this middleware for JSON data
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -34,8 +37,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 //------------
 app.use(userRoutes);
 app.use(postRoutes);
+app.use(reacRoutes);
+app.use(connRoutes);
+app.use(commRoutes);
 
-app.use(errorController.get404);
+//app.use(errorController.get404);
 
 //Associations
 //------------

@@ -1,26 +1,56 @@
 const Reaction = require('../models/reaction');
 
-exports.getReactions = (req, res) => {
-    // Your logic to fetch and list reactions (e.g., from a database)
-    const reactions = ['Reaction 1', 'Reaction 2', 'Reaction 3']; // Replace with actual reaction data
-    res.json(reactions);
+exports.getReactions = async (req, res) => {
+    try {
+      // Use Sequelize to fetch all reactions from the 'Reaction' model
+      const reactions = await Reaction.findAll(); // Replace with actual model name and attributes
+      console.log(reactions);
+      res.json(reactions);
+    } catch (error) {
+      console.error('Error fetching reactions:', error);
+      res.status(500).json({ error: 'An error occurred while fetching reactions.' });
+    }
   };
 
-exports.getAddReaction = (req, res) => {
-    // Your logic to render the reaction form
-    res.send('Reaction form'); // Replace with your actual form rendering logic
-  };
+  exports.postAddReaction = async (req, res) => {
+    // Extract the reaction data from the request body
+    const user_id = req.body.user_id; 
+    const post_id = req.body.post_id; 
+    const type_of = req.body.type_of; // Assuming userId and content are part of the request body
+    
+    console.log(user_id, post_id, type_of)
 
-exports.postAddReaction = (req, res) => {
-    // Your logic to process the reaction form data, e.g., save to a database
-    const newReaction = req.body; // Assuming reaction data is sent in the request body
-    // Process and save the reaction data
-    res.send('Reaction successfully added'); // Replace with your actual response
-  };
-
-exports.postDeleteReaction = (req, res) => {
-    const reactionId = req.body.reactionId; // Assuming you send the reaction ID in the request body
-    // Your logic to delete the reaction, e.g., from a database
-    res.send(`Reaction with ID ${reactionId} deleted`); // Replace with your actual response
+    try {
+      // Use Sequelize to create a new reaction record in the 'Reaction' model
+      const newReaction = await Reaction.create({
+        post_id,
+        user_id,
+        type_of
+      });
+  
+      res.send('Reaction successfully added');
+    } catch (error) {
+      console.error('Error adding reaction:', error);
+      res.status(500).json({ error: 'An error occurred while adding the reaction.' });
+    }
   };
   
+  exports.postDeleteReaction = async (req, res) => {
+    const reaction_id = req.body.reaction_id; // Assuming you send the reaction ID in the request body
+  
+    try {
+      // Use Sequelize to delete the reaction from the 'Reaction' model
+      const deletedReaction = await Reaction.destroy({
+        where: { reaction_id: reaction_id },
+      });
+  
+      if (deletedReaction) {
+        res.send(`Reaction with ID ${reaction_id} deleted`);
+      } else {
+        res.status(404).json({ error: 'Reaction not found' });
+      }
+    } catch (error) {
+      console.error('Error deleting reaction:', error);
+      res.status(500).json({ error: 'An error occurred while deleting the reaction.' });
+    }
+  };
