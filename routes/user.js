@@ -14,7 +14,7 @@ router.get('/users', userController.getUser);
 
 router.get('/users/:userId', userController.getOneUser)
 
-router.post('/users/sign-up', userController.postAddUser);
+router.post('/sign-up', userController.postAddUser);
 
 router.post('/users/delete-user', userController.postDeleteUser);
 
