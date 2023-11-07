@@ -48,28 +48,30 @@ exports.getOnePost = async (req, res) => {
   };
   
 
-exports.postEditPost = async (req, res) => {
-  const postId = req.params.postId;
-  const { title, content } = req.body;
-
-  try {
-    const post = await Post.findByPk(postId);
-
-    if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
+  exports.postEditPost = async (req, res) => {
+    const postId = req.params.postId;
+    const { title, content } = req.body;
+  
+    try {
+      const [rowsUpdated, [updatedPost]] = await Post.update(
+        { title, content },
+        {
+          where: { id: postId },
+          returning: true, // This ensures that the updated record is returned
+        }
+      );
+  
+      if (rowsUpdated === 0) {
+        return res.status(404).json({ error: 'Post not found' });
+      }
+  
+      res.json(updatedPost); // Send the updated post as a JSON response
+    } catch (error) {
+      console.error('Error editing post:', error);
+      res.status(500).json({ error: 'An error occurred while editing the post.' });
     }
-
-    post.title = title;
-    post.content = content;
-
-    await post.save();
-
-    res.send('Post successfully updated');
-  } catch (error) {
-    console.error('Error editing post:', error);
-    res.status(500).json({ error: 'An error occurred while editing the post.' });
-  }
-};
+  };
+  
 
 exports.postDeletePost = async (req, res) => {
     const post_id = req.body.post_id; // Assuming you send the post ID in the request body
