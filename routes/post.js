@@ -4,17 +4,19 @@ const express = require('express');
 
 const postController = require('../controllers/post');
 
+const authController = require('../controllers/authenticate');
+
 const router = express.Router();
 
 //posting crud
-router.get('/posts', postController.getPosts);
+router.get('/posts', authController.authenticateToken, postController.getPosts);
 
-router.post('/posts/add-post', postController.postAddPost);
+router.post('/posts/add-post', authController.authenticateToken, postController.postAddPost);
 
-router.get('/posts/:postId', postController.getOnePost);
+router.get('/posts/:postId', authController.authenticateToken, postController.getOnePost);
 
 //router.post('/posts/edit-post'. postController.postEditPost);
 
-router.post('/posts/delete-post', postController.postDeletePost);
+router.post('/posts/delete-post', authController.authenticateToken, postController.postDeletePost);
 
 module.exports = router;

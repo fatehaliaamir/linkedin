@@ -1,5 +1,8 @@
 const { Sequelize, NOW } = require('sequelize');
 const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+
+const secretKey = 'e9k6R#pG2tY^wBz$L&nN8fA!dH'; // Replace with a strong secret key
 
 exports.loginUser = async (req, res) => {
     const username = req.body.username; // Access the username from the request body
@@ -15,9 +18,13 @@ exports.loginUser = async (req, res) => {
       if (user.password !== password) {
         return res.status(401).json({ error: 'Invalid password' });
       }
+
+      // Create a JWT containing user information (e.g., user_id)
+        const token = jwt.sign({ user_id: user.id }, secretKey, { expiresIn: '1h' });
+
+        res.json({ token });
   
       // If username and password are correct, send a success response
-      res.send('Login successful');
     } catch (error) {
       console.error('Error during login:', error);
       res.status(500).json({ error: 'An error occurred during login' });

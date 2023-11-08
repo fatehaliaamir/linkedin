@@ -47,7 +47,7 @@ exports.getOnePost = async (req, res) => {
   };
   
 
-  exports.postEditPost = async (req, res) => {
+exports.postEditPost = async (req, res) => {
     const postId = req.params.postId;
     const { title, content } = req.body;
   
