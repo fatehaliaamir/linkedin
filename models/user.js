@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+const Post = require('../models/post');
 const sequelize = require('../utils/database');
 
 const User = sequelize.define('users', {
@@ -23,5 +24,8 @@ const User = sequelize.define('users', {
     type: Sequelize.DATE
   }
 });
+
+// Define the association
+User.hasMany(Post, { foreignKey: 'user_id' }); // user_id is the foreign key in the Post model
 
 module.exports = User;

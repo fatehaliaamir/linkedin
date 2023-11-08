@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+const Post = require('../models/post');
 const sequelize = require('../utils/database');
 
 const Comment = sequelize.define('comments', {
@@ -26,6 +27,19 @@ const Comment = sequelize.define('comments', {
     allowNull: false,
     type: Sequelize.DATE
   }
+});
+
+// Define associations
+Comment.belongsTo(Post, { foreignKey: 'post_id' });
+
+Comment.belongsTo(Comment, {
+  foreignKey: 'parent_id',
+  as: 'parentComment', // Alias for the association
+});
+
+Comment.hasMany(Comment, {
+  foreignKey: 'parent_id',
+  as: 'replies', // Alias for the association
 });
 
 module.exports = Comment;

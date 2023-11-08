@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 
+const Post = require('../models/post');
 const sequelize = require('../utils/database');
 
 const Reaction = sequelize.define('reactions', {
@@ -27,5 +28,8 @@ const Reaction = sequelize.define('reactions', {
     type: Sequelize.DATE
   }
 });
+
+// Define associations
+Comment.belongsTo(Post, { foreignKey: 'post_id' });
 
 module.exports = Reaction;
