@@ -5,32 +5,27 @@ const jwt = require('jsonwebtoken');
 const secretKey = 'e9k6R#pG2tY^wBz$L&nN8fA!dH'; // Replace with a strong secret key
 
 exports.loginUser = async (req, res) => {
-    const username = req.body.username; // Access the username from the request body
-    const password = req.body.password; // Access the password from the request body
-  
-    try {
-      const user = await User.findOne({ where: { username } });
-  
-      if (!user) {
-        return res.status(401).json({ error: 'User not found' });
-      }
-  
-      if (user.password !== password) {
-        return res.status(401).json({ error: 'Invalid password' });
-      }
+  const username = req.body.username;
+  const password = req.body.password;
 
-      // Create a JWT containing user information (e.g., user_id)
-        const token = jwt.sign({ user_id: user.id }, secretKey, { expiresIn: '1h' });
+  try {
+    const user = await User.findOne({ where: { username } });
 
-        res.json({ token });
-  
-      // If username and password are correct, send a success response
-    } catch (error) {
-      console.error('Error during login:', error);
-      res.status(500).json({ error: 'An error occurred during login' });
+    if (!user) {
+      return res.status(401).json({ error: 'User not found' });
     }
-  };
-  
+
+    if (user.password !== password) {
+      return res.status(401).json({ error: 'Invalid password' });
+    }
+
+    const token = jwt.sign({ user_id: user.id }, secretKey, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'An error occurred during login' });
+  }
+};
 
 exports.getUser = async (req, res) => {
   try {
@@ -65,9 +60,8 @@ exports.postAddUser = async (req, res) => {
   const username = req.body.username;
   const email = req.body.email;
   const password = req.body.password;
-  const updatedAt = NOW();
 
-    console.log(username, email, password);
+  console.log(username, email, password);
 
   try {
     const newUser = await User.create({
@@ -101,6 +95,3 @@ exports.postDeleteUser = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while deleting the user.' });
   }
 };
-
-  
-  

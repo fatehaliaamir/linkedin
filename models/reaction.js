@@ -1,24 +1,22 @@
 const Sequelize = require('sequelize');
-
-const Post = require('../models/post');
 const sequelize = require('../utils/database');
 
 const Reaction = sequelize.define('reactions', {
-  reaction_id: {             //specific id of the comment
+  reaction_id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  post_id: {                //post on which reacted is made
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
-  user_id: {                //user who reacted
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
-  type_of: Sequelize.STRING,//type of the reaction
+  post_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  user_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  type_of: Sequelize.STRING,
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -28,8 +26,5 @@ const Reaction = sequelize.define('reactions', {
     type: Sequelize.DATE
   }
 });
-
-// Define associations
-//Reaction.belongsTo(Post, { foreignKey: 'post_id' });
 
 module.exports = Reaction;
