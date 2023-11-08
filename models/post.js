@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const Post = require('../models/user');
+const User = require('../models/user');
 const Comment = require('../models/comment'); // Import the Comment model
 const Reaction = require('../models/reaction'); // Import the Reaction model
 const sequelize = require('../utils/database');
@@ -24,7 +24,7 @@ const Post = sequelize.define('posts', {
 });
 
 // Define the association
-Post.belongsTo(User, { foreignKey: 'user_id' }); // user_id is the foreign key linking to User
+//Post.belongsTo(User, { foreignKey: 'user_id' }); // user_id is the foreign key linking to User
 Post.hasMany(Comment, { foreignKey: 'post_id' });
 Post.hasMany(Reaction, { foreignKey: 'post_id' });
 

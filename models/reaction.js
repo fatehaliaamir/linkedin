@@ -30,6 +30,6 @@ const Reaction = sequelize.define('reactions', {
 });
 
 // Define associations
-Comment.belongsTo(Post, { foreignKey: 'post_id' });
+//Reaction.belongsTo(Post, { foreignKey: 'post_id' });
 
 module.exports = Reaction;

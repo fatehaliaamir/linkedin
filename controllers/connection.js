@@ -12,40 +12,69 @@ exports.getConn = async (req, res) => {
   }
 };
 
-
-  // Placeholder callback function for displaying the connection form
-exports.getAddConn = (req, res) => {
-    // Your logic to render the connection form
-    res.send('Connection form'); // Replace with your actual form rendering logic
-  };
-    
-// Placeholder callback function for handling connection form submission
-exports.postAddConn = (req, res) => {
-    // Your logic to process the connection form data, e.g., save to a database
-    const newConnection = req.body; // Assuming connection data is sent in the request body
-    // Process and save the connection data
-    res.send('Connection successfully added'); // Replace with your actual response
-  };
-
-  // Placeholder callback function for displaying the edit connection form
-exports.getEditConn = (req, res) => {
-    const connId = req.params.conn_Id; // Assuming you capture the connection ID from the URL
-    // Your logic to retrieve the connection for editing
-    res.send(`Edit Connection form for ID ${connId}`); // Replace with your actual form rendering logic
+exports.postAddConn = async (req, res) => {
+    const user_id = req.body.user_id;
+    const conn_user_id = req.body.conn_user_id;
+    const status = req.body.status;
+  
+    try {
+      // Create a new connection in the database
+      const newConnection = await Connection.create({
+        user_id,
+        conn_user_id,
+        status
+      });
+  
+      res.send('Connection successfully added');
+    } catch (error) {
+      console.error('Error adding connection:', error);
+      res.status(500).json({ error: 'An error occurred while adding the connection.' });
+    }
   };
 
-  // Placeholder callback function for handling the update connection form submission
-exports.postEditConn = (req, res) => {
-    const connId = req.body.conn_Id; // Assuming you send the connection ID in the request body
-    // Your logic to update the connection based on the submitted data
-    res.send(`Connection with ID ${connId} updated`); // Replace with your actual response
+  exports.postEditConn = async (req, res) => {
+    const conn_id = req.body.conn_id; // Assuming you send the connection ID in the request body
+    const newStatus = req.body.status; // Assuming you send the updated status in the request body
+  
+    try {
+      // Update the connection's status based on the connection ID
+      const updatedConnection = await Connection.update(
+        { status: newStatus },
+        {
+          where: { conn_id: conn_id },
+        }
+      );
+  
+      if (updatedConnection[0] === 0) {
+        return res.status(404).json({ error: 'Connection not found' });
+      }
+  
+      res.send(`Connection with ID ${conn_id} updated`);
+    } catch (error) {
+      console.error('Error updating connection:', error);
+      res.status(500).json({ error: 'An error occurred while updating the connection.' });
+    }
   };
+  
 
-  // Placeholder callback function for handling connection deletion
-exports.postDeleteUser = (req, res) => {
-    const connId = req.body.conn_Id; // Assuming you send the connection ID in the request body
-    // Your logic to delete the connection, e.g., from a database
-    res.send(`Connection with ID ${connId} deleted`); // Replace with your actual response
+  exports.postDeleteConn = async (req, res) => {
+    const conn_id = req.body.conn_id; // Assuming you send the connection ID in the request body
+  
+    try {
+      // Delete the connection based on the connection ID
+      const deletedConnection = await Connection.destroy({
+        where: { conn_id: conn_id },
+      });
+  
+      if (deletedConnection === 0) {
+        return res.status(404).json({ error: 'Connection not found' });
+      }
+  
+      res.send(`Connection with ID ${conn_id} deleted`);
+    } catch (error) {
+      console.error('Error deleting connection:', error);
+      res.status(500).json({ error: 'An error occurred while deleting the connection.' });
+    }
   };
-
+  
   

@@ -19,6 +19,7 @@ const Comment = sequelize.define('comments', {
       allowNull: false
     },
   content: Sequelize.STRING,//type of the reaction
+  parent_id: Sequelize.INTEGER,
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -30,7 +31,7 @@ const Comment = sequelize.define('comments', {
 });
 
 // Define associations
-Comment.belongsTo(Post, { foreignKey: 'post_id' });
+//Comment.belongsTo(Post, { foreignKey: 'post_id' });
 
 Comment.belongsTo(Comment, {
   foreignKey: 'parent_id',
