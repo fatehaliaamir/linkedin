@@ -1,3 +1,4 @@
 build/
 temp/
 logs/
+node_modules/
