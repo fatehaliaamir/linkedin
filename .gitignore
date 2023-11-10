@@ -1,4 +1,4 @@
-build/
-temp/
-logs/
-node_modules/
+/build
+/temp
+/logs
+/node_modules
