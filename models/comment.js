@@ -1,24 +1,23 @@
 const Sequelize = require('sequelize');
-
-const Post = require('../models/post');
 const sequelize = require('../utils/database');
 
 const Comment = sequelize.define('comments', {
-  comment_id: {             //specific id of the comment
+  comment_id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  post_id: {                //post on which reacted is made
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
-  user_id: {                //user who reacted
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
-  content: Sequelize.STRING,//type of the reaction
+  post_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  user_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
+  content: Sequelize.STRING,
+  parent_id: Sequelize.INTEGER,
   createdAt: {
     allowNull: false,
     type: Sequelize.DATE
@@ -29,17 +28,14 @@ const Comment = sequelize.define('comments', {
   }
 });
 
-// Define associations
-Comment.belongsTo(Post, { foreignKey: 'post_id' });
-
 Comment.belongsTo(Comment, {
   foreignKey: 'parent_id',
-  as: 'parentComment', // Alias for the association
+  as: 'parentComment'
 });
 
 Comment.hasMany(Comment, {
   foreignKey: 'parent_id',
-  as: 'replies', // Alias for the association
+  as: 'replies'
 });
 
 module.exports = Comment;

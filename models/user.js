@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
-
-const Post = require('../models/post');
 const sequelize = require('../utils/database');
+const Post = require('../models/post');
+const Conn = require('../models/connection');
 
 const User = sequelize.define('users', {
   id: {
@@ -25,7 +25,7 @@ const User = sequelize.define('users', {
   }
 });
 
-// Define the association
-User.hasMany(Post, { foreignKey: 'user_id' }); // user_id is the foreign key in the Post model
+User.hasMany(Post, { foreignKey: 'user_id' });
+User.hasMany(Conn, { foreignKey: 'user_id' });
 
 module.exports = User;
